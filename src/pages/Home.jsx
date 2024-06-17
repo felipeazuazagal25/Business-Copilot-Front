@@ -7,7 +7,7 @@ const Home = () => {
       <div>Testing new test</div>
       <div>Testing new test</div>
       <div>Testing new test</div>
-      <div>Testing new test</div>
+      <div>Testing new test 2</div>
     </div>
   );
 };
