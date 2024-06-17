@@ -1,0 +1,58 @@
+[
+  {
+    "order_id": 97,
+    "daily_id": "10",
+    "name": "Ricardo Gonzalez",
+    "created_at": "2024-06-02T17:22:28.182Z",
+    "client_id": 10,
+    "address": "Gran Avenida 123",
+    "amount": "52980.00",
+    "city": "La Cisterna",
+    "order_source": "Whatsapp",
+    "seller_name": "Empresa",
+    "phone_number": "945828542",
+    "raw": "10\nRicardo Gonzalez\nGran Avenida 123\nLa Cisterna\n945828542\n* 20 kg miniino - lavanda\n* 40 kg tuboclean - manzan\n* 1 saco easy clean 4kg lavanda\n52980\nTarjeat\nEmpress\nDejar pedido en conserjería",
+    "products": [
+      {
+        "order_product_id": 105,
+        "status": "found",
+        "quantity": 1,
+        "not_found_name": null,
+        "product_name": "Manga 20Kg Minino",
+        "variant": "Lavanda"
+      },
+      {
+        "order_product_id": 106,
+        "status": "found",
+        "quantity": 2,
+        "not_found_name": null,
+        "product_name": "Manga 20kg Turbo Clean",
+        "variant": "Manzana"
+      },
+      {
+        "order_product_id": 107,
+        "status": "not found",
+        "quantity": 1,
+        "not_found_name": "sacoeasycleankglavandaundefined",
+        "product_name": "NotFound",
+        "variant": "NotFound"
+      }
+    ],
+    "payment_info": [
+      {
+        "amount": 52980,
+        "payment_id": 31,
+        "payment_date": null,
+        "payment_method": "Tarjeta",
+        "payment_status": "false"
+      }
+    ],
+    "delivery_info": [
+      {
+        "delivery_date": "2024-06-03",
+        "delivery_note": "Dejar pedido en conserjería",
+        "delivery_status": "Pendiente de entrega"
+      }
+    ]
+  }
+]

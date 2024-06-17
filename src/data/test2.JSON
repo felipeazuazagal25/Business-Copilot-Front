@@ -1,0 +1,311 @@
+[
+  {
+    "product_id": 1,
+    "name": "20 Arena Granel",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "ArenaGranel",
+    "quantity": 20,
+    "current_stock": 1300,
+    "stock": [
+      {
+        "date": "2024-03-05 12:04:03",
+        "source": "intial",
+        "initalAmount": 0,
+        "finalAmount": 0
+      },
+      {
+        "date": "2024-03-05 12:04:03",
+        "source": "manual",
+        "initalAmount": 0,
+        "finalAmount": 1004
+      },
+      {
+        "date": "2024-03-05 12:04:03",
+        "source": "route internal",
+        "initalAmount": 1004,
+        "finalAmount": 950
+      },
+      {
+        "date": "2024-03-05 20:04:03",
+        "source": "manual",
+        "initalAmount": 950,
+        "finalAmount": 830
+      },
+      {
+        "date": "2024-03-06 12:04:03",
+        "source": "manual",
+        "initalAmount": 830,
+        "finalAmount": 1450
+      },
+      {
+        "date": "2024-03-07 12:04:03",
+        "source": "route internal",
+        "initalAmount": 1450,
+        "finalAmount": 1380
+      },
+      {
+        "date": "2024-03-07 22:04:03",
+        "source": "route internal",
+        "initalAmount": 1380,
+        "finalAmount": 1300
+      }
+    ]
+  },
+  {
+    "product_id": 2,
+    "name": "Manga 20kg Mundo Tito",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "MundoTito",
+    "quantity": 20
+  },
+  {
+    "product_id": 3,
+    "name": "Manga 20kg Easy Clean (4kg)",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "EasyClean4kgLavanda",
+    "quantity": 20
+  },
+  {
+    "product_id": 4,
+    "name": "Manga 20kg Easy Clean (4kg)",
+    "variant": "Manzana",
+    "company_id": null,
+    "matching_string": "EasyClean4kgManzana",
+    "quantity": 20
+  },
+  {
+    "product_id": 5,
+    "name": "Manga 20kg Easy Clean (4kg)",
+    "variant": "Limon",
+    "company_id": null,
+    "matching_string": "EasyClean4kgLimon",
+    "quantity": 20
+  },
+  {
+    "product_id": 6,
+    "name": "Saco 20kg Easy Clean",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "EasyCleanLavanda",
+    "quantity": 20
+  },
+  {
+    "product_id": 7,
+    "name": "Saco 20kg Easy Clean",
+    "variant": "Manzana",
+    "company_id": null,
+    "matching_string": "EasyCleanManzana",
+    "quantity": 20
+  },
+  {
+    "product_id": 8,
+    "name": "Saco 20kg Easy Clean",
+    "variant": "Limon",
+    "company_id": null,
+    "matching_string": "EasyCleanLimon",
+    "quantity": 20
+  },
+  {
+    "product_id": 9,
+    "name": "Manga 24kg Easy Clean",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "EasyCleanLavanda",
+    "quantity": 24
+  },
+  {
+    "product_id": 10,
+    "name": "Manga 24kg Easy Clean",
+    "variant": "Manzana",
+    "company_id": null,
+    "matching_string": "EasyCleanManzana",
+    "quantity": 24
+  },
+  {
+    "product_id": 11,
+    "name": "Manga 24kg Easy Clean",
+    "variant": "Limon",
+    "company_id": null,
+    "matching_string": "EasyCleanLimon",
+    "quantity": 24
+  },
+  {
+    "product_id": 12,
+    "name": "Manga 20kg City Cat ",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "CityCatLavanda",
+    "quantity": 20
+  },
+  {
+    "product_id": 13,
+    "name": "Manga 20kg City Cat ",
+    "variant": "Talco de Bebe",
+    "company_id": null,
+    "matching_string": "CityCatTalco de Bebe",
+    "quantity": 20
+  },
+  {
+    "product_id": 14,
+    "name": "Manga 20Kg Minino",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "MininoLavanda",
+    "quantity": 20
+  },
+  {
+    "product_id": 15,
+    "name": "Manga 20Kg Minino",
+    "variant": "Manzana",
+    "company_id": null,
+    "matching_string": "MininoManzana",
+    "quantity": 20
+  },
+  {
+    "product_id": 16,
+    "name": "Manga 20Kg Minino",
+    "variant": "Talco de Bebe",
+    "company_id": null,
+    "matching_string": "MininoTalco de Bebe",
+    "quantity": 20
+  },
+  {
+    "product_id": 17,
+    "name": "Manga 20kg Turbo Clean",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "TurboCleanLavanda",
+    "quantity": 20
+  },
+  {
+    "product_id": 18,
+    "name": "Manga 20kg Turbo Clean",
+    "variant": "Manzana",
+    "company_id": null,
+    "matching_string": "TurboCleanManzana",
+    "quantity": 20
+  },
+  {
+    "product_id": 19,
+    "name": "Manga 20kg Turbo Clean",
+    "variant": "Limon",
+    "company_id": null,
+    "matching_string": "TurboCleanLimon",
+    "quantity": 20
+  },
+  {
+    "product_id": 20,
+    "name": "Manga 20kg Turbo Clean",
+    "variant": "Talco de Bebe",
+    "company_id": null,
+    "matching_string": "TurboCleanTalco de Bebe",
+    "quantity": 20
+  },
+  {
+    "product_id": 21,
+    "name": "Manga 20kg Turbo Clean",
+    "variant": "Mocka",
+    "company_id": null,
+    "matching_string": "TurboCleanMocka",
+    "quantity": 20
+  },
+  {
+    "product_id": 22,
+    "name": "Saco 20kg Bengala",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "BengalaLavanda",
+    "quantity": 20
+  },
+  {
+    "product_id": 23,
+    "name": "Saco 20kg Love Sand",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "LoveSandLavanda",
+    "quantity": 20
+  },
+  {
+    "product_id": 24,
+    "name": "Saco 20kg Love Sand",
+    "variant": "Talco de Bebe",
+    "company_id": null,
+    "matching_string": "LoveSandTalco de Bebe",
+    "quantity": 20
+  },
+  {
+    "product_id": 25,
+    "name": "Saco 20 kg Safari",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "SafariLavanda",
+    "quantity": 20
+  },
+  {
+    "product_id": 26,
+    "name": "Manga 24kg Safari",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "SafariLavanda",
+    "quantity": 24
+  },
+  {
+    "product_id": 27,
+    "name": "4 Sacos Safari Cristal",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "CristalLavanda",
+    "quantity": 4
+  },
+  {
+    "product_id": 28,
+    "name": "1 Caja Safari Cristal",
+    "variant": "Lavanda",
+    "company_id": null,
+    "matching_string": "CristalLavanda",
+    "quantity": 1
+  },
+  {
+    "product_id": 29,
+    "name": "Arenero Cupula",
+    "variant": "N°1",
+    "company_id": null,
+    "matching_string": "AreneroCupula1",
+    "quantity": 1
+  },
+  {
+    "product_id": 30,
+    "name": "Arenero Cupula",
+    "variant": "N°2",
+    "company_id": null,
+    "matching_string": "AreneroCupula2",
+    "quantity": 1
+  },
+  {
+    "product_id": 31,
+    "name": "Arenero Cupula",
+    "variant": "N°3",
+    "company_id": null,
+    "matching_string": "AreneroCupula3",
+    "quantity": 1
+  },
+  {
+    "product_id": 32,
+    "name": "Arenero Cupula",
+    "variant": "N°4",
+    "company_id": null,
+    "matching_string": "AreneroCupula4",
+    "quantity": 1
+  },
+  {
+    "product_id": 33,
+    "name": "Fit Formula",
+    "variant": "-",
+    "company_id": null,
+    "matching_string": "FitFormula",
+    "quantity": 1
+  }
+]
