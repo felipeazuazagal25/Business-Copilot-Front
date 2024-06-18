@@ -7,10 +7,11 @@ import DataTable from "../DataTable";
 
 const MakeRouteStep2 = ({ routeDay }) => {
   const [data, setData] = useState([]);
-  const [countBySeller, setCountBySeller] = useState({});
   const [isDataLoading, setIsDataLoading] = useState(true); // change it to false when data fetched
   const [dataError, setDataError] = useState(null);
   const [refreshPage, setRefreshPage] = useState(false);
+
+  const [namesDuplicates, setNamesDuplicates] = useState([]);
 
   useEffect(async () => {
     setIsDataLoading(true);
@@ -18,8 +19,10 @@ const MakeRouteStep2 = ({ routeDay }) => {
     const fetchData = async () => {
       try {
         const vals = await fetchOrders(null, routeDay);
-        const valsDuplicate = getDuplicates(vals);
-        setData(valsDuplicate);
+        setNamesDuplicates(
+          Array.from(new Set(getDuplicates(vals).map((item) => item.name)))
+        );
+        setData(vals);
         setIsDataLoading(false);
       } catch (error) {
         console.log(error);
@@ -82,18 +85,24 @@ const MakeRouteStep2 = ({ routeDay }) => {
         ) : dataError ? (
           <div>No hay pedidos agendados en esta fecha.</div>
         ) : (
-          <DataTable
-            addButton={false}
-            columns={columns}
-            data={data}
-            columnRowClick={"order_id"}
-            callbackRefresh={() => {
-              setRefreshPage(!refreshPage);
-            }}
-            callbackRemove={(removeElements) =>
-              handleRemoveOrders(removeElements)
-            }
-          />
+          namesDuplicates.map((name) => (
+            <div className="">
+              <hr className="h-1 w-full my-8 bg-gray-400 border-0 rounded" />
+              <div className="font-bold text-xl">{name}</div>
+              <DataTable
+                addButton={false}
+                columns={columns}
+                data={data.filter((item) => item.name === name)}
+                columnRowClick={"order_id"}
+                callbackRefresh={() => {
+                  setRefreshPage(!refreshPage);
+                }}
+                callbackRemove={(removeElements) =>
+                  handleRemoveOrders(removeElements)
+                }
+              />
+            </div>
+          ))
         )}
       </div>
     </div>

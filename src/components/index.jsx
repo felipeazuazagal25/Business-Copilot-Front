@@ -12,6 +12,7 @@ export { default as Header } from "./Header";
 export { default as InDevelopmentPage } from "./InDevelopmentPage";
 export { default as InputBox } from "./InputBox";
 export { default as InputWithSearch } from "./InputWithSearch";
+export { default as LoadingMessage } from "./LoadingMessage";
 export { default as Navbar } from "./Navbar";
 export { default as Notification } from "./Notification";
 export { default as PopUp } from "./PopUp";

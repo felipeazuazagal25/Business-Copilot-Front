@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
-import { Navbar, Footer, Sidebar } from "./components";
+import { Navbar, Footer, Sidebar, LoadingMessage } from "./components";
 import {
   Clients,
   CreateProducts,
@@ -60,17 +60,7 @@ const App = () => {
                   activeMenu ? "lg:w-[calc(100%-18rem)]" : "w-full"
                 }`}
               />
-              {loadingMessage && (
-                <div
-                  className={`fixed flex ${
-                    activeMenu ? "w-[calc(100%-18rem)]" : "w-full"
-                  } justify-center`}
-                >
-                  <div className="px-2 py-1 max-h-16 outline outline-1 bg-yellow-100 font-bold drop-shadow-md">
-                    Cargando...
-                  </div>
-                </div>
-              )}
+              {loadingMessage && <LoadingMessage activeMenu={activeMenu} />}
             </div>
 
             <div>

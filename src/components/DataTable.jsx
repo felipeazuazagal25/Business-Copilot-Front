@@ -218,7 +218,7 @@ const DataTable = ({
       <div
         className="overflow-y-auto overflow-x-auto drop-shadow-md rounded-2xl"
         style={{
-          height: height - 260,
+          maxHeight: height - 360,
         }}
       >
         <table className="w-full text-left rtl:text-right text-sky-blue">
