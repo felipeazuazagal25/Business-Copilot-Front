@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import TextField from "@mui/material/TextField";
 
 import { makeStyles } from "@mui/styles";
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
   },
 });
 
-const InputBox = ({ label, text }) => {
+const InputBox = ({ label, text, callback }) => {
   const classes = useStyles();
   return (
     <TextField
@@ -35,6 +35,7 @@ const InputBox = ({ label, text }) => {
       variant="outlined"
       defaultValue={text}
       className={`${classes.root}`}
+      onChange={(event) => callback(event.target.value)}
       InputLabelProps={{
         style: {
           fontSize: 18, // Adjust the font size as needed

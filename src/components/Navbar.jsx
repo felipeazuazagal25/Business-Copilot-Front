@@ -58,8 +58,8 @@ const Navbar = ({ className }) => {
   return (
     <div className={`h-20 ${className}`}>
       <div
-        style={{ zIndex: 4000 }}
-        className={`flex fixed justify-between p-2 ${className} bg-indigo-50 top-0 pb-0${
+        style={{ zIndex: 500 }}
+        className={`flex fixed justify-between p-2 ${className} bg-white drop-shadow-md top-0 pb-0${
           activeMenu ? "" : ""
         }`}
         fixed="top"

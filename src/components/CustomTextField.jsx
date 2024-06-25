@@ -59,7 +59,7 @@ const CustomTextField = ({
         value={textFormatter(textValue)}
         multiline={multiline}
         InputProps={{
-          readOnly: true,
+          readOnly: readOnly,
         }}
         minRows={minRows}
         maxRows={maxRows}

@@ -3,7 +3,7 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import { isDateInPast } from "../utils/utils";
+import { isDateInPast, getNextDayISOString } from "../utils/utils";
 
 import { ThreeDot } from "react-loading-indicators";
 
@@ -34,7 +34,7 @@ import {
 import { IoClose } from "react-icons/io5";
 
 import axios from "axios";
-import { fetchOrderByID } from "../utils/fetchOrders";
+import { fetchOrderByID, createOrder } from "../utils/fetchOrders";
 
 const { format } = new Intl.NumberFormat("es-CL", {
   style: "currency",
@@ -43,6 +43,7 @@ const { format } = new Intl.NumberFormat("es-CL", {
 
 const Order = () => {
   const navigate = useNavigate();
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
   const handleGoBack = (event) => {
     event.preventDefault();
@@ -66,26 +67,63 @@ const Order = () => {
   const [newProduct, setNewProduct] = useState(false);
 
   useEffect(() => {
-    setIsDataLoading(true);
-    const fetchData = async () => {
-      try {
-        const vals = await fetchOrderByID(id);
-        setOrder(vals[0]);
-        setPaymentInformationPopUp(vals[0].payment_info.map((item) => false));
-        setDeliveryInformationPopUp(vals[0].delivery_info.map((item) => false));
-        setProducInfoOrders(vals[0].products);
-        setIsDataLoading(false);
-        console.log("Estos son los valotres de val");
-        console.log(vals[0]);
-        console.log(infoOrder);
-      } catch (error) {
-        console.log(error);
-        setOrder(null);
-        setDataError(error);
-        setIsDataLoading(false);
-      }
-    };
-    fetchData();
+    if (id === "create") {
+      setIsDataLoading(false);
+      setOrder({
+        order_id: undefined, // ???
+        daily_id: "",
+        name: "",
+        created_at: new Date().toISOString(), // Fecha actual
+        client_id: undefined, /// ???
+        address: "",
+        amount: "",
+        city: "",
+        order_source: "",
+        seller_name: "",
+        phone_number: "",
+        raw: "Orden Creada desde Business Copilot",
+        products: [],
+        payment_info: [
+          {
+            amount: 0,
+            payment_id: undefined, // ???
+            payment_date: null,
+            payment_method: undefined, // ???
+            payment_status: false,
+          },
+        ],
+        delivery_info: [
+          {
+            delivery_date: getNextDayISOString(),
+            delivery_note: null,
+            delivery_status: "Pendiente de entrega",
+          },
+        ],
+      });
+    } else {
+      setIsDataLoading(true);
+      const fetchData = async () => {
+        try {
+          const vals = await fetchOrderByID(id);
+          setOrder(vals[0]);
+          setPaymentInformationPopUp(vals[0].payment_info.map((item) => false));
+          setDeliveryInformationPopUp(
+            vals[0].delivery_info.map((item) => false)
+          );
+          setProducInfoOrders(vals[0].products);
+          setIsDataLoading(false);
+          console.log("Estos son los valotres de val");
+          console.log(vals[0]);
+          console.log(infoOrder);
+        } catch (error) {
+          console.log(error);
+          setOrder(null);
+          setDataError(error);
+          setIsDataLoading(false);
+        }
+      };
+      fetchData();
+    }
   }, []);
 
   // Sending all information to END POINT
@@ -100,6 +138,18 @@ const Order = () => {
       console.log("Error");
     }
   };
+
+  const createOrderBC = async () => {
+    try {
+      console.log('Order from "Order" page: ', order);
+      const val = await createOrder(order);
+      console.log(val);
+      window.location.href = baseUrl + "/orders";
+    } catch (error) {
+      console.log("Error");
+    }
+  };
+
   // Show/Hide Message Raw
   const [showMessageRaw, setShowMessageRaw] = useState(false);
 
@@ -126,7 +176,7 @@ const Order = () => {
         product_name: newProduct.product_name,
         variation: newProduct.variation,
         quantity: 1,
-        status: "found",
+        status: null,
       });
     } else {
       currentOrder.products.push({
@@ -393,7 +443,17 @@ const Order = () => {
                 <div className=" w-[calc(50%)] flex justify-left flex-wrap pr-5 pl-5 ">
                   {/* First Section*/}
                   <div className=" w-[calc(100%)] flex justify-left mt-5">
-                    <InputBox label="Nombre Cliente" text={order.name} />
+                    <InputBox
+                      label="Nombre Cliente"
+                      text={order.name}
+                      callback={(value) => {
+                        console.log(value);
+                        const newOrder = { ...order };
+                        order.name = value;
+                        setOrder(newOrder);
+                        console.log("new Order", newOrder);
+                      }}
+                    />
                   </div>
                   <div className="w-[calc(100%)] lg:flex flex-column justify-left mt-5">
                     <InputBox label="Direccion" text={order.address} />
@@ -873,13 +933,26 @@ const Order = () => {
           >
             Cancelar
           </Button>
-          <Button
-            disabled={order === infoOrder}
-            onClick={sendPostBackend}
-            className="min-w-36"
-          >
-            Guardar
-          </Button>
+
+          {id === "create" ? (
+            <Button
+              disabled={order === infoOrder}
+              onClick={() => {
+                createOrderBC();
+              }}
+              className="min-w-36"
+            >
+              Añadir
+            </Button>
+          ) : (
+            <Button
+              disabled={order === infoOrder}
+              onClick={sendPostBackend}
+              className="min-w-36"
+            >
+              Guardar
+            </Button>
+          )}
         </div>
       </div>
     </>

@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { fetchOrders, removeOrders } from "../../utils/fetchOrders";
-import { getDuplicates } from "../../utils/utils";
-import CustomDatePicker from "../CustomDatePicker";
+import { findMissingNumberSequence } from "../../utils/utils";
 import { ThreeDot } from "react-loading-indicators";
-import DataTable from "../DataTable";
+
+import CustomTextField from "../CustomTextField";
+
+import Button from "../Button";
+import { setRef } from "@mui/material";
 
 const MakeRouteStep2 = ({ routeDay }) => {
   const [data, setData] = useState([]);
-  const [countBySeller, setCountBySeller] = useState({});
   const [isDataLoading, setIsDataLoading] = useState(true); // change it to false when data fetched
   const [dataError, setDataError] = useState(null);
   const [refreshPage, setRefreshPage] = useState(false);
+
+  const [namesDuplicates, setNamesDuplicates] = useState([]);
 
   useEffect(async () => {
     setIsDataLoading(true);
@@ -18,9 +22,25 @@ const MakeRouteStep2 = ({ routeDay }) => {
     const fetchData = async () => {
       try {
         const vals = await fetchOrders(null, routeDay);
-        const valsDuplicate = getDuplicates(vals);
-        setData(valsDuplicate);
+        setData(vals);
         setIsDataLoading(false);
+
+        if (lowerBound === null || upperBound === null) {
+        } else {
+          if (lowerBound >= upperBound) {
+          } else {
+            const filteredOrders = vals.filter(
+              (item) =>
+                item.daily_id >= lowerBound && item.daily_id <= upperBound
+            );
+            const missingValues = findMissingNumberSequence(
+              filteredOrders.map((item) => Number(item.daily_id))
+            );
+            console.log("missing values", missingValues);
+            setMissingValues(missingValues);
+            setCheckShowMissingValues(true);
+          }
+        }
       } catch (error) {
         console.log(error);
         setData(null);
@@ -63,10 +83,42 @@ const MakeRouteStep2 = ({ routeDay }) => {
     }
   };
 
+  const [lowerBound, setLowerBound] = useState(null);
+  const [upperBound, setUpperBound] = useState(null);
+  const handleChangeLowerBound = (value) => {
+    setLowerBound(value);
+  };
+  const handleChangeUpperBound = (value) => {
+    setUpperBound(value);
+  };
+
+  const [checkShowMissingValues, setCheckShowMissingValues] = useState(false);
+  const [missingValues, setMissingValues] = useState([]);
+  const checkSequenceDailyID = () => {
+    setRefreshPage(!refreshPage);
+    if (lowerBound === null || upperBound === null) {
+      alert("Debe ingresar valores.");
+    } else {
+      if (lowerBound >= upperBound) {
+        alert("Valores no válidos.");
+      } else {
+        const filteredOrders = data.filter(
+          (item) => item.daily_id >= lowerBound && item.daily_id <= upperBound
+        );
+        const missingValues = findMissingNumberSequence(
+          filteredOrders.map((item) => Number(item.daily_id))
+        );
+        console.log("missing values", missingValues);
+        setMissingValues(missingValues);
+        setCheckShowMissingValues(true);
+      }
+    }
+  };
+
   return (
     <div className="flex-column justify-center p-3">
       <div className="w-full text-xl font-bold text-gray-600">
-        Eliminar Duplicados
+        Pedidos faltantes
       </div>
       <div>
         {isDataLoading ? (
@@ -82,18 +134,65 @@ const MakeRouteStep2 = ({ routeDay }) => {
         ) : dataError ? (
           <div>No hay pedidos agendados en esta fecha.</div>
         ) : (
-          <DataTable
-            addButton={false}
-            columns={columns}
-            data={data}
-            columnRowClick={"order_id"}
-            callbackRefresh={() => {
-              setRefreshPage(!refreshPage);
-            }}
-            callbackRemove={(removeElements) =>
-              handleRemoveOrders(removeElements)
-            }
-          />
+          <>
+            <div>Inserte rango para verificar</div>
+            <div className="flex w-full justify-between items-center">
+              <div className="flex ">
+                <div className="mx-2">
+                  <CustomTextField
+                    inputType="numeric"
+                    multiline={false}
+                    initialValue={lowerBound}
+                    callback={(value) => {
+                      console.log(value);
+                      handleChangeLowerBound(value);
+                      setCheckShowMissingValues(false);
+                      setMissingValues([]);
+                    }}
+                  />
+                </div>
+                <div className="mx-2">
+                  <CustomTextField
+                    inputType="numeric"
+                    multiline={false}
+                    initialValue={upperBound}
+                    callback={(value) => {
+                      console.log(value);
+                      handleChangeUpperBound(value);
+                      setCheckShowMissingValues(false);
+                      setMissingValues([]);
+                    }}
+                  />
+                </div>
+              </div>
+              <Button onClick={checkSequenceDailyID}>
+                {checkShowMissingValues ? "Revisar Nuevamente" : "Revisar"}
+              </Button>
+            </div>
+            <div className="p-5">
+              {checkShowMissingValues ? (
+                missingValues.length > 0 ? (
+                  missingValues.map((item) => (
+                    <>
+                      <div className="text-lg font-bold">
+                        Faltan los siguientes pedidos
+                      </div>
+                      <div className="py-2 px-3 bg-gray-100 my-1 rounded-lg">
+                        Pedido {item}
+                      </div>
+                    </>
+                  ))
+                ) : (
+                  <div>
+                    Todos los pedidos dentro de la secuencia se encuentran
+                    agendados.
+                  </div>
+                )
+              ) : (
+                <></>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>

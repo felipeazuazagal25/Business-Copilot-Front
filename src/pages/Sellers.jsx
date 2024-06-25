@@ -67,7 +67,7 @@ const Sellers = () => {
             subtitle=""
             infoLabel={["Posición", "Activo"]} // se puede poner todo en un objeto
             info={["position", "is_active"]}
-            boxSize={{ widht: 64, height: "auto" }}
+            // boxSize={{ widht: 64, height: "auto" }}
           ></DataGrid>
         )}
       </div>

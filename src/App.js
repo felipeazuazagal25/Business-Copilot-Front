@@ -4,10 +4,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
-import { Navbar, Footer, Sidebar } from "./components";
+import { Navbar, Footer, Sidebar, LoadingMessage } from "./components";
 import {
   Clients,
   CreateProducts,
+  DashboardDailyRoute,
   Drivers,
   Home,
   MakeRoute,
@@ -60,17 +61,7 @@ const App = () => {
                   activeMenu ? "lg:w-[calc(100%-18rem)]" : "w-full"
                 }`}
               />
-              {loadingMessage && (
-                <div
-                  className={`fixed flex ${
-                    activeMenu ? "w-[calc(100%-18rem)]" : "w-full"
-                  } justify-center`}
-                >
-                  <div className="px-2 py-1 max-h-16 outline outline-1 bg-yellow-100 font-bold drop-shadow-md">
-                    Cargando...
-                  </div>
-                </div>
-              )}
+              {loadingMessage && <LoadingMessage activeMenu={activeMenu} />}
             </div>
 
             <div>
@@ -83,7 +74,6 @@ const App = () => {
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/orders/:id" element={<Order />} />
                 <Route path="/products" element={<Products />} />
-                <Route path="/products" element={<Products />} />
                 <Route path="/products/create" element={<CreateProducts />} />
                 <Route path="/products/:id" element={<Product />} />
                 <Route path="/sellers" element={<Sellers />} />
@@ -92,6 +82,10 @@ const App = () => {
 
                 {/* Apps */}
                 <Route path="/makeroute" element={<MakeRoute />} />
+                <Route
+                  path="/dashboardDailyRoute/:routeDay"
+                  element={<DashboardDailyRoute />}
+                />
               </Routes>
             </div>
           </div>

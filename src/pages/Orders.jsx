@@ -9,13 +9,21 @@ import { fetchOrders, removeOrders } from "../utils/fetchOrders";
 import DataTable from "../components/DataTable";
 import { ThreeDot } from "react-loading-indicators";
 
-import { Header, DataFilters, CustomDatePicker, Test } from "../components";
+import {
+  Header,
+  DataFilters,
+  CustomDatePicker,
+  Test,
+  Button,
+} from "../components";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const Orders = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
+
+  const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
   const getCreatedDate = (queryParams) => {
     if (queryParams.get("createdAt") === null) {
@@ -39,7 +47,6 @@ const Orders = () => {
   const [deliveryDate, setDeliveryDate] = useState(
     getDeliveryDate(queryParams)
   );
-
   // Variable to show loading animation
   const [data, setData] = useState([]);
   const [isDataLoading, setIsDataLoading] = useState(true); // change it to false when data fetched
@@ -144,7 +151,7 @@ const Orders = () => {
         {/* Showing data saved correctly */}
         <div className="mb-5 flex justify-between">
           <Header category="Página" title="Pedidos" />
-          <DataFilters>
+          <div className="flex items-center">
             <CustomDatePicker
               label="Fecha Agendado"
               initialValue={createdDate}
@@ -152,15 +159,23 @@ const Orders = () => {
               // defaultValue={createdDate}
               readOnly={true}
             />
-            <div className="min-w-10" />
-            <CustomDatePicker
-              label="Fecha de Entrega"
-              initialValue={deliveryDate}
-              callback={(value) => handleChangeDeliveryDate(value)}
-              // defaultValue={createdDate}
-              readOnly={true}
-            />
-          </DataFilters>
+            <div className="ml-5 mr-5">
+              <CustomDatePicker
+                label="Fecha de Entrega"
+                initialValue={deliveryDate}
+                callback={(value) => handleChangeDeliveryDate(value)}
+                // defaultValue={createdDate}
+                readOnly={true}
+              />
+            </div>
+            <Button
+              onClick={() => {
+                window.location.href = baseUrl + "/orders/create";
+              }}
+            >
+              Añadir
+            </Button>
+          </div>
         </div>
         <Test />
 
@@ -178,6 +193,7 @@ const Orders = () => {
           <div>No hay pedidos agendados en esta fecha.</div>
         ) : (
           <DataTable
+            addButton={false}
             columns={columns}
             data={data}
             columnRowClick={"order_id"}

@@ -17,6 +17,8 @@ import StepConnector, {
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 
+import { useNavigate } from "react-router-dom";
+
 import {
   Header,
   CustomDatePicker,
@@ -111,13 +113,15 @@ QontoStepIcon.propTypes = {
 
 const steps = [
   "Día",
-  "Eliminar Duplicados",
   "Pedidos Faltantes",
+  "Eliminar Duplicados",
   "Limpieza",
   "Asignar Choferes",
 ];
 
 const MakeRoute = () => {
+  const navigate = useNavigate();
+
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -190,11 +194,11 @@ const MakeRoute = () => {
                   ) : activeStep === 1 ? (
                     <MakeRouteStep2 routeDay={routeDay} />
                   ) : activeStep === 2 ? (
-                    <MakeRouteStep3 />
+                    <MakeRouteStep3 routeDay={routeDay} />
                   ) : activeStep === 3 ? (
-                    <MakeRouteStep4 />
+                    <MakeRouteStep4 routeDay={routeDay} />
                   ) : activeStep === 4 ? (
-                    <MakeRouteStep5 />
+                    <MakeRouteStep5 routeDay={routeDay} />
                   ) : (
                     <div></div>
                   )}
@@ -210,9 +214,19 @@ const MakeRoute = () => {
                   </Button>
                   <Box sx={{ flex: "1 1 auto" }} />
 
-                  <Button onClick={handleNext}>
-                    {activeStep === steps.length - 1 ? "Terminar" : "Siguiente"}
-                  </Button>
+                  {activeStep === steps.length - 1 ? (
+                    <Button
+                      onClick={() =>
+                        navigate(
+                          "/DashboardDailyRoute/" + routeDay.toISOString()
+                        )
+                      }
+                    >
+                      Terminar
+                    </Button>
+                  ) : (
+                    <Button onClick={handleNext}>Siguiente</Button>
+                  )}
                 </Box>
               </React.Fragment>
             )}
