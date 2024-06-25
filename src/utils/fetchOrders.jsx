@@ -40,6 +40,7 @@ export const fetchOrders = async (createdDate = null, deliveryDate = null) => {
 };
 
 export const fetchOrderByID = async (id) => {
+  console.log(process.env.REACT_APP_END_POINT + "/orders/" + id);
   const response = await fetch(
     process.env.REACT_APP_END_POINT + "/orders/" + id,
     {
@@ -70,4 +71,105 @@ export const removeOrders = async (ordersID) => {
   console.log(val);
 
   return val;
+};
+
+export const createOrder = async (rawOrder) => {
+  // const order
+  const order = {
+    daily_id: rawOrder.daily_id,
+    name: rawOrder.name,
+    address: rawOrder.name,
+    amount: rawOrder.amount,
+    city: rawOrder.city,
+    phone_number: rawOrder.phone_number,
+    products: ["120 kg Safari - lavanda", "20 kg Minino - lavanda"],
+    // products: [
+    //   { product_name: "easy clean", variant: "lavanda", quantity: 6 },
+    //   { product_name: "minino", variant: "lavanda", quantity: 1 },
+    // ],
+    seller: rawOrder.seller,
+    payment: "Pagado", // Pendiente
+    observation: "Dejar en conserjería", // Pendiente
+    raw: "Orden insertada por Business Copilot",
+  };
+  console.log(order);
+  const val = axios.post(
+    process.env.REACT_APP_END_POINT + "/orders/create",
+    order
+  );
+  return val;
+};
+
+export const getGroupedOrders = (orders, driversTemplate) => {
+  console.log("Entrando a getGrpuedOders");
+  const ordersByCity = orders.reduce((acc, order) => {
+    acc[order.city] = (acc[order.city] || 0) + 1;
+    return acc;
+  }, {});
+
+  // Create initial data structure
+  const initialData = {
+    groups: {},
+    groupOrder: [],
+  };
+
+  driversTemplate.forEach(({ driver, city }) => {
+    if (!initialData.groups[driver]) {
+      initialData.groups[driver] = {
+        id: driver,
+        title: driver,
+        cards: [],
+      };
+      initialData.groupOrder.push(driver);
+    }
+    console.log("ordersbyCity", ordersByCity);
+    if (ordersByCity[city] > 0) {
+      initialData.groups[driver].cards.push({
+        id: city,
+        content: city,
+        number: ordersByCity[city],
+      });
+    }
+  });
+
+  console.log(initialData);
+  return initialData;
+};
+
+const initialData = {
+  groups: {
+    Victor: {
+      id: "group-1",
+      title: "Group 1",
+      cards: [
+        { id: "card-1", content: "Card 1", number: 10 },
+        { id: "card-2", content: "Card 2", number: 20 },
+        { id: "card-3", content: "Card 3", number: 30 },
+      ],
+    },
+    "group-2": {
+      id: "group-2",
+      title: "Group 2",
+      cards: [
+        { id: "card-4", content: "Card 4", number: 40 },
+        { id: "card-5", content: "Card 5", number: 50 },
+      ],
+    },
+    "group-3": {
+      id: "group-3",
+      title: "Group 3",
+      cards: [],
+    },
+    "group-4": {
+      id: "group-4",
+      title: "Group 4",
+      cards: [],
+    },
+    "group-5": {
+      id: "group-5",
+      title: "Group 5",
+      cards: [],
+    },
+  },
+  groupOrder: ["group-1", "group-2", "group-3", "group-4", "group-5"],
 };

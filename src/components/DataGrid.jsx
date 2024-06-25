@@ -13,9 +13,10 @@ const DataGrid = ({
   subtitle,
   infoLabel,
   info,
-  boxSize = { widht: 128, height: 128 },
+  boxSize = { width: "72", height: "128" },
 }) => {
   const [checked, setChecked] = useState(data.map((item) => false));
+  console.log(boxSize);
 
   useEffect(() => {
     setChecked(data.map((item) => false));
@@ -81,7 +82,7 @@ const DataGrid = ({
           <div
             style={{ cursor: "pointer" }}
             className={` h-${boxSize.height} w-${
-              boxSize.widht
+              boxSize.width
             } px-5 pt-2 pb-4 m-3 rounded-md hover:drop-shadow-lg transition-all ease-in-out duration-100 ${
               checked[id] ? "bg-gray-200 drop-shadow-md" : "bg-gray-100"
             }`}

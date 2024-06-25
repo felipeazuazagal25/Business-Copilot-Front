@@ -8,6 +8,7 @@ import { Navbar, Footer, Sidebar, LoadingMessage } from "./components";
 import {
   Clients,
   CreateProducts,
+  DashboardDailyRoute,
   Drivers,
   Home,
   MakeRoute,
@@ -73,7 +74,6 @@ const App = () => {
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/orders/:id" element={<Order />} />
                 <Route path="/products" element={<Products />} />
-                <Route path="/products" element={<Products />} />
                 <Route path="/products/create" element={<CreateProducts />} />
                 <Route path="/products/:id" element={<Product />} />
                 <Route path="/sellers" element={<Sellers />} />
@@ -82,6 +82,10 @@ const App = () => {
 
                 {/* Apps */}
                 <Route path="/makeroute" element={<MakeRoute />} />
+                <Route
+                  path="/dashboardDailyRoute/:routeDay"
+                  element={<DashboardDailyRoute />}
+                />
               </Routes>
             </div>
           </div>

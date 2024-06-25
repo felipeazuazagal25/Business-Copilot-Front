@@ -536,17 +536,17 @@ export const employeesGrid = [
 ];
 
 export const links = [
-  {
-    title: "Home",
-    spaTitle: "Home",
-    links: [
-      {
-        name: "home",
-        spaName: "Menú Principal",
-        icon: <FiShoppingBag />,
-      },
-    ],
-  },
+  // {
+  //   title: "Home",
+  //   spaTitle: "Home",
+  //   links: [
+  //     {
+  //       name: "home",
+  //       spaName: "Menú Principal",
+  //       icon: <FiShoppingBag />,
+  //     },
+  //   ],
+  // },
 
   {
     title: "Pages",

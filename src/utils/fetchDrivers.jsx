@@ -1,4 +1,4 @@
-export const fetchSellers = async () => {
+export const fetchDrivers = async () => {
   const response = await fetch(
     process.env.REACT_APP_END_POINT + "/personnel/all",
     {
@@ -14,7 +14,7 @@ export const fetchSellers = async () => {
   if (result.status === "404") {
     throw new Error("Error al cargar los productos.");
   }
-  const sellers = result.filter((item) => item.position === "VENDEDOR");
+  const sellers = result.filter((item) => item.position === "CHOFER");
 
   return sellers;
 };

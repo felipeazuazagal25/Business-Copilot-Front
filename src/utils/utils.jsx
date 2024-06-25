@@ -44,9 +44,41 @@ export function titleCase(str) {
 
 export const getDuplicates = (array, col) => {
   const arrayCol = array.map((item) => item[col]);
+  console.log(arrayCol);
   const duplicates = array.filter(
     (item, index) => arrayCol.indexOf(item[col]) !== index
   );
   console.log("Duplicates ", duplicates);
   return duplicates;
+};
+
+export const getNextDayISOString = () => {
+  const now = new Date();
+  const nextDay = new Date(now);
+  nextDay.setDate(now.getDate() + 1); // Add one day to the current date
+  return nextDay.toISOString();
+};
+
+export const findMissingNumberSequence = (arr) => {
+  const min = Math.min(...arr);
+  const max = Math.max(...arr);
+  const missingNumbers = [];
+
+  for (let i = min; i <= max; i++) {
+    if (!arr.includes(i)) {
+      missingNumbers.push(i);
+    }
+  }
+
+  return missingNumbers;
+};
+
+export const areThereNotFoundProducts = (productsArray) => {
+  let result = false;
+  productsArray.forEach((product) => {
+    if (product.status === "not found") {
+      result = true;
+    }
+  });
+  return result;
 };
