@@ -9,6 +9,8 @@ import { fetchOrders, removeOrders } from "../utils/fetchOrders";
 import DataTable from "../components/DataTable";
 import { ThreeDot } from "react-loading-indicators";
 
+import * as XLSX from "xlsx";
+
 import {
   Header,
   DataFilters,
@@ -145,6 +147,15 @@ const Orders = () => {
     }
   };
 
+  // Donwload Data in Excel
+  const handleDownloadClick = async () => {
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+    XLSX.write(workbook, { bookType: "xlsx", type: "binary" });
+    XLSX.writeFile(workbook, "nombre.xlsx");
+  };
+
   return (
     <>
       <div className="m-10 mt-5 p-10 pt-6 bg-white rounded-3xl">
@@ -169,11 +180,15 @@ const Orders = () => {
               />
             </div>
             <Button
+              className="mr-2"
               onClick={() => {
                 window.location.href = baseUrl + "/orders/create";
               }}
             >
               Añadir
+            </Button>
+            <Button color="green" onClick={handleDownloadClick}>
+              Descargar Excel
             </Button>
           </div>
         </div>

@@ -7,6 +7,7 @@ export { default as CustomTextField } from "./CustomTextField";
 export { default as DataGrid } from "./DataGrid";
 export { default as DataFilters } from "./DataFilters";
 export { default as DragAndDrop } from "./DragAndDrop";
+export { default as DataTable } from "./DataTable";
 export { default as Footer } from "./Footer";
 export { default as Header } from "./Header";
 export { default as InDevelopmentPage } from "./InDevelopmentPage";

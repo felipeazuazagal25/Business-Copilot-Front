@@ -50,43 +50,6 @@ const MakeRouteStep5 = ({ routeDay }) => {
     { driver: "Carlos", city: "ÑUÑOA" },
     { driver: "Carlos", city: "PEÑALOLEN" },
   ];
-  const initialData = {
-    groups: {
-      "group-1": {
-        id: "group-1",
-        title: "Group 1",
-        cards: [
-          { id: "card-1", content: "Card 1", number: 10 },
-          { id: "card-2", content: "Card 2", number: 20 },
-          { id: "card-3", content: "Card 3", number: 30 },
-        ],
-      },
-      "group-2": {
-        id: "group-2",
-        title: "Group 2",
-        cards: [
-          { id: "card-4", content: "Card 4", number: 40 },
-          { id: "card-5", content: "Card 5", number: 50 },
-        ],
-      },
-      "group-3": {
-        id: "group-3",
-        title: "Group 3",
-        cards: [],
-      },
-      "group-4": {
-        id: "group-4",
-        title: "Group 4",
-        cards: [],
-      },
-      "group-5": {
-        id: "group-5",
-        title: "Group 5",
-        cards: [],
-      },
-    },
-    groupOrder: ["group-1", "group-2", "group-3", "group-4", "group-5"],
-  };
   const [data, setData] = useState([]);
   const [isDataLoading, setIsDataLoading] = useState(true); // change it to false when data fetched
   const [dataError, setDataError] = useState(null);

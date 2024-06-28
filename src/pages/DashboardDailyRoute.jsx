@@ -41,7 +41,7 @@ const DashboardDailyRoute = () => {
         <div className="mb-5 flex justify-between">
           <Header category="Aplicación" title="Rutas y Cargas" />
         </div>
-        <div className="">as</div>
+        <div className=""></div>
       </div>
     </>
   );
