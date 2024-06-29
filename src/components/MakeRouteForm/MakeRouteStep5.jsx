@@ -3,17 +3,25 @@ import {
   fetchOrders,
   removeOrders,
   getGroupedOrders,
+  assignDriverToOrders,
 } from "../../utils/fetchOrders";
+
+import { fetchDrivers } from "../../utils/fetchDrivers";
 import { getDuplicates, areThereNotFoundProducts } from "../../utils/utils";
 import CustomDatePicker from "../CustomDatePicker";
 import { ThreeDot } from "react-loading-indicators";
-import DataTable from "../DataTable";
+
+import { Button, DataTable } from "../../components";
 
 import { IoMdRefresh } from "react-icons/io";
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const MakeRouteStep5 = ({ routeDay }) => {
+import { useNavigate } from "react-router-dom";
+
+const MakeRouteStep5 = ({ routeDay, callback }) => {
+  const navigate = useNavigate();
+
   const driversTemplate = [
     { driver: "Victor", city: "LA FLORIDA" },
     { driver: "Victor", city: "LA PINTANA" },
@@ -51,10 +59,17 @@ const MakeRouteStep5 = ({ routeDay }) => {
     { driver: "Carlos", city: "PEÑALOLEN" },
   ];
   const [data, setData] = useState([]);
+  const [drivers, setDrivers] = useState([]);
   const [isDataLoading, setIsDataLoading] = useState(true); // change it to false when data fetched
   const [dataError, setDataError] = useState(null);
   const [refreshPage, setRefreshPage] = useState(false);
-  const [groupData, setGroupData] = useState(initialData);
+  const [groupData, setGroupData] = useState({});
+
+  const [callbackObject, setCallbackObject] = useState({
+    groupData: groupData,
+    data: data,
+    drivers: drivers,
+  });
 
   useEffect(async () => {
     setIsDataLoading(true);
@@ -63,6 +78,8 @@ const MakeRouteStep5 = ({ routeDay }) => {
       try {
         const vals = await fetchOrders(null, routeDay);
         setData(vals);
+        const drivers = await fetchDrivers();
+        setDrivers(drivers);
         const groupVals = getGroupedOrders(vals, driversTemplate);
         console.log(groupVals);
         setGroupData(groupVals);
@@ -75,6 +92,7 @@ const MakeRouteStep5 = ({ routeDay }) => {
       }
     };
     fetchData();
+    callback({ groupData: groupData, data: data, drivers: drivers });
   }, [routeDay, refreshPage]);
 
   const columns = [
@@ -153,7 +171,7 @@ const MakeRouteStep5 = ({ routeDay }) => {
           [newGroup.id]: newGroup,
         },
       };
-
+      console.log("New state ", newState);
       setGroupData(newState);
       return;
     }
@@ -181,8 +199,9 @@ const MakeRouteStep5 = ({ routeDay }) => {
         [newFinish.id]: newFinish,
       },
     };
-
     setGroupData(newState);
+    setCallbackObject({ groupData: newState, data: data, drivers: drivers }); // may not be needed
+    callback({ groupData: newState, data: data, drivers: drivers });
   };
 
   return (
@@ -298,6 +317,7 @@ const MakeRouteStep5 = ({ routeDay }) => {
           </>
         )}
       </div>
+      <div className="flex w-full justify-end"></div>
     </div>
   );
 };

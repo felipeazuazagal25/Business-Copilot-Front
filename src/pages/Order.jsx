@@ -83,7 +83,7 @@ const Order = () => {
         phone_number: "",
         raw: "Orden Creada desde Business Copilot",
         products: [],
-        payment_info: [
+        payment_info_array: [
           {
             amount: 0,
             payment_id: undefined, // ???
@@ -92,7 +92,7 @@ const Order = () => {
             payment_status: false,
           },
         ],
-        delivery_info: [
+        delivery_info_array: [
           {
             delivery_date: getNextDayISOString(),
             delivery_note: null,
@@ -106,9 +106,11 @@ const Order = () => {
         try {
           const vals = await fetchOrderByID(id);
           setOrder(vals[0]);
-          setPaymentInformationPopUp(vals[0].payment_info.map((item) => false));
+          setPaymentInformationPopUp(
+            vals[0].payment_info_array.map((item) => false)
+          );
           setDeliveryInformationPopUp(
-            vals[0].delivery_info.map((item) => false)
+            vals[0].delivery_info_array.map((item) => false)
           );
           setProducInfoOrders(vals[0].products);
           setIsDataLoading(false);
@@ -213,12 +215,12 @@ const Order = () => {
 
   const handlePaymentStatus = (key) => {
     let currentOrder = { ...order };
-    currentOrder.payment_info[key].paymentStatus =
-      !currentOrder.payment_info[key].paymentStatus;
-    if (currentOrder.payment_info[key].paymentStatus) {
-      currentOrder.payment_info[key].payment_date = new Date();
+    currentOrder.payment_info_array[key].paymentStatus =
+      !currentOrder.payment_info_array[key].paymentStatus;
+    if (currentOrder.payment_info_array[key].paymentStatus) {
+      currentOrder.payment_info_array[key].payment_date = new Date();
     } else {
-      currentOrder.payment_info[key].payment_date = null;
+      currentOrder.payment_info_array[key].payment_date = null;
     }
 
     setOrder(currentOrder);
@@ -235,7 +237,7 @@ const Order = () => {
 
   const escPaymentInformation = (event) => {
     if (event.key === "Escape") {
-      setPaymentInformationPopUp(order.payment_info.map((item) => false));
+      setPaymentInformationPopUp(order.payment_info_array.map((item) => false));
     }
   };
 
@@ -247,40 +249,40 @@ const Order = () => {
   // Handle Change Payment Information
   const handleChangePaymentMethod = (value, key) => {
     let currentOrder = { ...order };
-    currentOrder.payment_info[key].payment_method = value;
+    currentOrder.payment_info_array[key].payment_method = value;
     setOrder(currentOrder);
   };
 
   const handleChangePaymentDate = (value, key) => {
     let currentOrder = { ...order };
-    currentOrder.payment_info[key].payment_date = value;
+    currentOrder.payment_info_array[key].payment_date = value;
     setOrder(currentOrder);
   };
 
   const handleCreationPayment = () => {
     let currentOrder = { ...order };
-    currentOrder.payment_info.push({
+    currentOrder.payment_info_array.push({
       paymentStatus: false,
       paymentMethod: undefined,
       paymentDate: undefined,
       amount: 0,
     });
     setOrder(currentOrder);
-    const list = order.payment_info.map((item) => false);
+    const list = order.payment_info_array.map((item) => false);
     list[list.length - 1] = !list[list.length - 1];
     setPaymentInformationPopUp(list);
   };
 
   const updatePaymentAmount = (value, key) => {
     let currentOrder = { ...order };
-    currentOrder.payment_info[key].amount = value;
+    currentOrder.payment_info_array[key].amount = value;
     setOrder(currentOrder);
   };
 
   const handleRemovePayment = (value) => {
-    if (order.payment_info.length > 1) {
+    if (order.payment_info_array.length > 1) {
       let currentOrder = { ...order };
-      currentOrder.payment_info.splice(value, 1);
+      currentOrder.payment_info_array.splice(value, 1);
       setOrder(currentOrder);
       const list = [...paymentInformationPopUp];
       list.splice(value, 1);
@@ -293,8 +295,8 @@ const Order = () => {
   // Delivery Status
   const handleDeliveryStatus = (key) => {
     let currentOrder = { ...order };
-    currentOrder.delivery_info[key].deliveryStatus =
-      !currentOrder.delivery_info[key].deliveryStatus;
+    currentOrder.delivery_info_array[key].deliveryStatus =
+      !currentOrder.delivery_info_array[key].deliveryStatus;
     setOrder(currentOrder);
   };
 
@@ -307,47 +309,49 @@ const Order = () => {
 
   const escDeliveryInformation = (event) => {
     if (event.key === "Escape") {
-      setDeliveryInformationPopUp(order.delivery_info.map((item) => false));
+      setDeliveryInformationPopUp(
+        order.delivery_info_array.map((item) => false)
+      );
     }
   };
 
   // Handle Delivery Information
   const handleChangeDeliveryDriver = (value, key) => {
     let currentOrder = { ...order };
-    currentOrder.delivery_info[key].driver = value;
+    currentOrder.delivery_info_array[key].driver = value;
     setOrder(currentOrder);
   };
 
   const handleChangeDeliveryDate = (value, key) => {
     let currentOrder = { ...order };
-    currentOrder.delivery_info[key].delivery_date = value;
+    currentOrder.delivery_info_array[key].delivery_date = value;
     setOrder(currentOrder);
   };
 
   const handleChangeDeliveryNote = (value, key) => {
     let currentOrder = { ...order };
-    currentOrder.delivery_info[key].deliveryNote = value;
+    currentOrder.delivery_info_array[key].deliveryNote = value;
     setOrder(currentOrder);
   };
 
   const handleCreationDelivery = () => {
     let currentOrder = { ...order };
-    currentOrder.delivery_info.push({
+    currentOrder.delivery_info_array.push({
       deliveryStatus: false,
       driver: "No Asignado",
       deliveryDate: undefined,
       deliveryNote: "",
     });
     setOrder(currentOrder);
-    const list = order.delivery_info.map((item) => false);
+    const list = order.delivery_info_array.map((item) => false);
     list[list.length - 1] = !list[list.length - 1];
     setDeliveryInformationPopUp(list);
   };
 
   const handleRemoveDelivery = (value) => {
-    if (order.delivery_info.length > 1) {
+    if (order.delivery_info_array.length > 1) {
       let currentOrder = { ...order };
-      currentOrder.delivery_info.splice(value, 1);
+      currentOrder.delivery_info_array.splice(value, 1);
       setOrder(currentOrder);
       const list = [...deliveryInformationPopUp];
       list.splice(value, 1);
@@ -555,30 +559,32 @@ const Order = () => {
                       <div className="text-xl font-bold">Estado de Pago</div>
                       <div
                         className={` px-2 m-1 rounded-md ${
-                          order.payment_info
+                          order.payment_info_array
                             .map((item) => item.paymentStatus)
                             .filter(Boolean).length ===
-                          order.payment_info.map((item) => item.paymentStatus)
-                            .length
+                          order.payment_info_array.map(
+                            (item) => item.paymentStatus
+                          ).length
                             ? "bg-green-50 text-green-700"
                             : "bg-red-50 text-red-700"
                         }`}
                       >
                         Pagado{" "}
                         {
-                          order.payment_info
+                          order.payment_info_array
                             .map((item) => item.paymentStatus)
                             .filter(Boolean).length
                         }{" "}
                         de{" "}
                         {
-                          order.payment_info.map((item) => item.paymentStatus)
-                            .length
+                          order.payment_info_array.map(
+                            (item) => item.paymentStatus
+                          ).length
                         }
                       </div>
                     </div>
 
-                    {order.payment_info.map((item, key) => (
+                    {order.payment_info_array.map((item, key) => (
                       <div className="p-1 flex-column">
                         <PopUp trigger={paymentInformationPopUp[key]}>
                           <div className="flex justify-between items-center">
@@ -672,7 +678,7 @@ const Order = () => {
                           <div className="flex-column justify-center items-center text-center">
                             <CheckBox
                               checked={
-                                order.payment_info.map(
+                                order.payment_info_array.map(
                                   (item) => item.paymentStatus
                                 )[key]
                               }
@@ -744,7 +750,7 @@ const Order = () => {
                         Cantidad Envíos{" "}
                         <span className="font-bold">
                           {
-                            order.delivery_info.map(
+                            order.delivery_info_array.map(
                               (item) => item.deliveryStatus
                             ).length
                           }
@@ -752,7 +758,7 @@ const Order = () => {
                       </div>
                     </div>
 
-                    {order.delivery_info.map((item, key) => (
+                    {order.delivery_info_array.map((item, key) => (
                       <div className="p-1 flex-column">
                         <PopUp trigger={deliveryInformationPopUp[key]}>
                           <div className="flex justify-between items-center">
@@ -762,7 +768,7 @@ const Order = () => {
                                   new Date(item.delivery_date)
                                 )}
                                 checked={
-                                  order.delivery_info.map(
+                                  order.delivery_info_array.map(
                                     (item) => item.deliveryStatus
                                   )[key]
                                 }

@@ -173,3 +173,37 @@ const initialData = {
   },
   groupOrder: ["group-1", "group-2", "group-3", "group-4", "group-5"],
 };
+
+export const assignDriverToOrders = (groupedData, orders, drivers) => {
+  const groups = groupedData.groups;
+  const result = [];
+  const driversCity = Object.keys(groups).map((driver) => ({
+    driver_name: driver,
+    cities: groups[driver].cards.map((card) => card.id),
+  }));
+  driversCity.forEach((item) => {
+    const driver_id = drivers.filter(
+      (driver) => driver.name === item.driver_name
+    )[0].personnel_id;
+    item.cities.forEach((city) => {
+      const cityOrders = orders.filter((order) => order.city === city);
+      cityOrders.forEach((order) => {
+        result.push({
+          delivery_id:
+            order.delivery_info_array[order.delivery_info_array.length - 1]
+              .delivery_status,
+          driver_id: driver_id,
+        });
+      });
+    });
+  });
+
+  console.log("result", result); // Remove when conneted to database
+
+  const val = axios.post(
+    process.env.REACT_APP_END_POINT + "/orders/edit/driver",
+    result
+  );
+
+  return val;
+};
