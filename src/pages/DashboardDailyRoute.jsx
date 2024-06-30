@@ -4,6 +4,7 @@ import { Header, DataTable, Button } from "../components";
 import { ThreeDot } from "react-loading-indicators";
 import { fetchOrders, removeOrders } from "../utils/fetchOrders";
 import { fetchDrivers } from "../utils/fetchDrivers";
+import { fromDatetoYearMonthDay } from "../utils/utils";
 
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -326,8 +327,8 @@ const DashboardDailyRoute = () => {
                                         item.delivery_info_array.length - 1
                                       ].driver_id === driver.personnel_id
                                   ),
-                                  driver,
-                                  date
+                                  driver.name,
+                                  fromDatetoYearMonthDay(routeDay)
                                 );
                               }}
                             >
@@ -353,8 +354,8 @@ const DashboardDailyRoute = () => {
                                         item.delivery_info_array.length - 1
                                       ].driver_id === driver.personnel_id
                                   ),
-                                  driver,
-                                  date
+                                  driver.name,
+                                  fromDatetoYearMonthDay(routeDay)
                                 );
                               }}
                             >

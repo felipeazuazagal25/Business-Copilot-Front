@@ -191,7 +191,7 @@ export const assignDriverToOrders = (groupedData, orders, drivers) => {
         result.push({
           delivery_id:
             order.delivery_info_array[order.delivery_info_array.length - 1]
-              .delivery_status,
+              .delivery_id,
           driver_id: driver_id,
         });
       });
@@ -202,7 +202,7 @@ export const assignDriverToOrders = (groupedData, orders, drivers) => {
 
   const val = axios.post(
     process.env.REACT_APP_END_POINT + "/orders/edit/driver",
-    result
+    { delivery_info: result }
   );
 
   return val;

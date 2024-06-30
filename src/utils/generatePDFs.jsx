@@ -63,8 +63,8 @@ export const generateRoutePDF = (orders, driver, date) => {
   const rows = orders.map((order) => ({
     payment_status: "",
     daily_id: order.daily_id,
-    name: order.name.toUpperCase(),
-    address: order.address.split(",")[0].toUpperCase(),
+    name: order.name?.toUpperCase(),
+    address: order.address?.split(",")[0].toUpperCase(),
     // block_depto: order.address.split(",")[0]?.toUpperCase(),
     city: order.city?.toUpperCase(),
     phone_number: order.phone_number,
@@ -77,12 +77,16 @@ export const generateRoutePDF = (orders, driver, date) => {
     order_details: order.products
       .map((p) =>
         p.not_found_name
-          ? `${
-              p.quantity
-            } x ${p.not_found_name?.toUpperCase()} (${p.not_found_variant?.toUpperCase()})`
-          : `${
-              p.quantity
-            } x ${p.product_name?.toUpperCase()} (${p.variant?.toUpperCase()})`
+          ? `${p.quantity} x ${p.not_found_name
+              ?.replace(/[^\x20-\x7E]/g, "")
+              .toUpperCase()} (${p.not_found_variant
+              ?.replace(/[^\x20-\x7E]/g, "")
+              .toUpperCase()})`
+          : `${p.quantity} x ${p.product_name?.toUpperCase()} (${
+              p.variant.toLowerCase() === "notfound"
+                ? p.not_found_variant?.toUpperCase()
+                : p.variant.toUpperCase()
+            })`
       )
       .join("\n"),
     amount: order.amount,
@@ -163,6 +167,8 @@ export const generateRoutePDF = (orders, driver, date) => {
 };
 
 export const generateLoadDriverPDF = (orders, driver, date) => {
+  console.log("Original data inside GenerateLoadDriverPDF", orders);
+
   const pdf = new jsPDF({ orientation: "portrait" });
 
   const borderX = 20;
@@ -205,27 +211,59 @@ export const generateLoadDriverPDF = (orders, driver, date) => {
   // Group products by name and variation
   const productGroups = orders.reduce((acc, order) => {
     order.products.forEach((product) => {
-      const productKey = `${product.product_name}-${product.variation}`;
+      console.log("Product from productGroups", product);
+
+      const productKey = `${
+        product.not_found_name
+          ? product.not_found_name.toUpperCase()
+          : product.product_name?.toUpperCase()
+      }-${
+        product.not_found_variant
+          ? product.not_found_variant.toUpperCase()
+          : product.variant?.toUpperCase()
+      }`;
+
+      console.log("product Key", productKey);
       if (!acc[productKey]) {
         acc[productKey] = {
-          name: product.product_name.toUpperCase(),
-          variation: product.variation.toUpperCase(),
+          product_name: product.not_found_name
+            ? product.not_found_name.toUpperCase()
+            : product.product_name?.toUpperCase(),
+          variant: product.not_found_variant
+            ? product.not_found_variant.toUpperCase()
+            : product.variant?.toUpperCase(),
           quantity: 0,
+          not_found_name: product.not_found_name ? true : false,
         };
       }
       acc[productKey].quantity += product.quantity;
     });
+
+    console.log("FIRST ACC", acc);
     return acc;
   }, {});
+
+  console.log("ProductGroups", productGroups);
 
   // Prepare the table data
   const groupedProducts = Object.values(productGroups).reduce(
     (acc, product) => {
-      const productName = product.name;
-      if (!acc[productName]) {
-        acc[productName] = [];
+      console.log("acc", acc);
+      console.log("product", product.not_found_name);
+
+      const productName = product.product_name;
+      if (!product.not_found_name) {
+        if (!acc[productName]) {
+          acc[productName] = [];
+        }
+        acc[productName].push(product);
+      } else {
+        if (!acc["ADICIONALES"]) {
+          // Not found products
+          acc["ADICIONALES"] = [];
+        }
+        acc["ADICIONALES"].push(product);
       }
-      acc[productName].push(product);
       return acc;
     },
     {}
@@ -233,9 +271,39 @@ export const generateLoadDriverPDF = (orders, driver, date) => {
 
   const tableData = [];
   Object.keys(groupedProducts).forEach((productName, index) => {
+    if (productName !== "ADICIONALES") {
+      tableData.push([
+        {
+          content: `${productName}`,
+          colSpan: 3,
+          styles: {
+            halign: "left",
+            fontStyle: "bold",
+            fillColor: [255, 255, 255],
+          },
+        },
+      ]);
+      groupedProducts[productName].forEach((product) => {
+        tableData.push([
+          { content: "", styles: { fillColor: [255, 255, 255] } },
+          {
+            content: `${product.variant}`,
+            styles: { fillColor: [255, 255, 255] },
+          },
+          {
+            content: `${product.quantity}`,
+            styles: { fillColor: [255, 255, 255], halign: "center" },
+          },
+        ]);
+      });
+    }
+  });
+
+  // LAST ITEM OF NOT FOUND PRODUCTS CALLED "ADICIONALES"
+  if (groupedProducts["ADICIONALES"]) {
     tableData.push([
       {
-        content: `${productName}`,
+        content: "ADICIONALES",
         colSpan: 3,
         styles: {
           halign: "left",
@@ -244,11 +312,20 @@ export const generateLoadDriverPDF = (orders, driver, date) => {
         },
       },
     ]);
-    groupedProducts[productName].forEach((product) => {
+    groupedProducts["ADICIONALES"].forEach((product) => {
+      const aditionalProduct = product.product_name.replace(
+        /[^\x20-\x7E]/g,
+        ""
+      );
+      const additionaVariant =
+        product.variant.replace(/[^\x20-\x7E]/g, "") === "NOTFOUND"
+          ? ""
+          : " - " + product.variant.replace(/[^\x20-\x7E]/g, "");
+      console.log(aditionalProduct);
       tableData.push([
         { content: "", styles: { fillColor: [255, 255, 255] } },
         {
-          content: `${product.variation}`,
+          content: aditionalProduct + additionaVariant,
           styles: { fillColor: [255, 255, 255] },
         },
         {
@@ -257,11 +334,11 @@ export const generateLoadDriverPDF = (orders, driver, date) => {
         },
       ]);
     });
-  });
+  }
 
   console.log(tableData);
 
-  const tableWidth = 90; // Adjust based on your column widths and content
+  const tableWidth = 110; // Adjust based on your column widths and content
   const pageWidth = pdf.internal.pageSize.getWidth();
   const startX = (pageWidth - tableWidth) / 2;
 
@@ -294,7 +371,7 @@ export const generateLoadDriverPDF = (orders, driver, date) => {
       },
       columnStyles: {
         0: { cellWidth: 10 }, // Adjust width of the first column
-        1: { cellWidth: 70 }, // Adjust width of the second column
+        1: { cellWidth: 90 }, // Adjust width of the second column
         2: { cellWidth: 10 }, // Adjust width of the third column
       },
       margin: startX, // Remove right and left margins
