@@ -59,12 +59,15 @@ export const getNextDayISOString = () => {
   return nextDay.toISOString();
 };
 
-export const findMissingNumberSequence = (arr) => {
-  const min = Math.min(...arr);
-  const max = Math.max(...arr);
+export const findMissingNumberSequence = (arr, lb, ub) => {
+  const min = Number(lb);
+  const max = Number(ub);
   const missingNumbers = [];
 
+  console.log(min, max);
+
   for (let i = min; i <= max; i++) {
+    console.log("i ", i);
     if (!arr.includes(i)) {
       missingNumbers.push(i);
     }

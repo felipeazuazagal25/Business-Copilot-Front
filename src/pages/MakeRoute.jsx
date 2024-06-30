@@ -19,6 +19,8 @@ import Typography from "@mui/material/Typography";
 
 import { useNavigate } from "react-router-dom";
 
+import { assignDriverToOrders } from "../utils/fetchOrders";
+
 import {
   Header,
   CustomDatePicker,
@@ -142,6 +144,19 @@ const MakeRoute = () => {
 
   const [routeDay, setRouteDay] = useState(null);
 
+  const [groupData, setGroupData] = useState([]);
+  const [data, setData] = useState([]);
+  const [drivers, setDrivers] = useState([]);
+
+  const handleAssignDriverToOrders = async () => {
+    try {
+      await assignDriverToOrders(groupData, data, drivers);
+    } catch (error) {
+      console.log(error);
+    }
+    navigate("/DashboardDailyRoute/" + routeDay.toISOString());
+  };
+
   return (
     <>
       <div className="m-10 mt-5 p-10 pt-6 bg-white rounded-3xl">
@@ -198,7 +213,15 @@ const MakeRoute = () => {
                   ) : activeStep === 3 ? (
                     <MakeRouteStep4 routeDay={routeDay} />
                   ) : activeStep === 4 ? (
-                    <MakeRouteStep5 routeDay={routeDay} />
+                    <MakeRouteStep5
+                      routeDay={routeDay}
+                      callback={(callbackObject) => {
+                        setGroupData(callbackObject.groupData);
+                        setData(callbackObject.data);
+                        setDrivers(callbackObject.drivers);
+                        console.log("CALLBACK HAPPENED");
+                      }}
+                    />
                   ) : (
                     <div></div>
                   )}
@@ -215,13 +238,7 @@ const MakeRoute = () => {
                   <Box sx={{ flex: "1 1 auto" }} />
 
                   {activeStep === steps.length - 1 ? (
-                    <Button
-                      onClick={() =>
-                        navigate(
-                          "/DashboardDailyRoute/" + routeDay.toISOString()
-                        )
-                      }
-                    >
+                    <Button onClick={handleAssignDriverToOrders}>
                       Terminar
                     </Button>
                   ) : (

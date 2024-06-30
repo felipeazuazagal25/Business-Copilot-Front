@@ -1,11 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { fetchOrders } from "../../utils/fetchOrders";
 import CustomDatePicker from "../CustomDatePicker";
-import { Button } from "../../components";
+import { Button, DataTable } from "../../components";
 import { ThreeDot } from "react-loading-indicators";
 
 const MakeRouteStep1 = ({ daySelectedCallback }) => {
   const [routeDay, setRouteDay] = useState(null);
+
+  const columns = [
+    { header: "ID", accessorKey: "daily_id", footer: "ID" },
+    { header: "Nombre", accessorKey: "name", footer: "Name" },
+    { header: "Dirección", accessorKey: "address", footer: "Adress" },
+    { header: "Comuna", accessorKey: "city", footer: "City" },
+    {
+      header: "Productos",
+      accessorKey: "products",
+      footer: "Products",
+      cell: ({ row }) =>
+        row.original.products !== undefined &&
+        row.original.products
+          .filter((item) => item.product_name !== "NotFound")
+          .map((item) => (
+            <>
+              {item.product_name} <br />
+            </>
+          )),
+    },
+  ];
 
   const [data, setData] = useState([]);
   const [countBySeller, setCountBySeller] = useState({});
@@ -68,23 +89,34 @@ const MakeRouteStep1 = ({ daySelectedCallback }) => {
           ) : dataError ? (
             <div className="p-5"></div>
           ) : (
-            <div className="flex w-full justify-center oultine">
-              <div className="p-5 max-w-sm  w-full">
-                <div className="bg-gray-200 flex w-full justify-between p-3 rounded-md">
-                  <div className=" font-bold text-xl">
-                    Cantidad de Pedidos:{" "}
+            <>
+              <div className="flex w-full justify-center oultine">
+                <div className="p-5 max-w-sm  w-full">
+                  <div className="bg-gray-200 flex w-full justify-between p-3 rounded-md">
+                    <div className=" font-bold text-xl">
+                      Cantidad de Pedidos:{" "}
+                    </div>
+                    <div className="font-bold text-xl">{data.length}</div>
                   </div>
-                  <div className="font-bold text-xl">{data.length}</div>
+                  {Object.entries(countBySeller).map(([key, value]) => (
+                    <div className="flex mx-3 px-3 my-1 p-1 justify-between text-lg bg-gray-100 rounded-md">
+                      <div className="">{key}</div>
+                      <div>{value}</div>
+                    </div>
+                  ))}
                 </div>
-                {console.log(countBySeller)}
-                {Object.entries(countBySeller).map(([key, value]) => (
-                  <div className="flex mx-3 px-3 my-1 p-1 justify-between text-lg bg-gray-100 rounded-md">
-                    <div className="">{key}</div>
-                    <div>{value}</div>
-                  </div>
-                ))}
               </div>
-            </div>
+              <DataTable
+                addButton={false}
+                columns={columns}
+                data={data}
+                columnRowClick={"order_id"}
+                callbackRefresh={() => {
+                  setRefreshPage(!refreshPage);
+                }}
+                callbackRemove={(removeElements) => console.log(removeElements)}
+              />
+            </>
           )}
         </div>
       </div>

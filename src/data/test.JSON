@@ -38,7 +38,7 @@
         "variant": "Lavanda"
       }
     ],
-    "payment_info": [
+    "payment_info_array": [
       {
         "amount": 52980,
         "payment_id": 31,
@@ -47,7 +47,7 @@
         "payment_status": "false"
       }
     ],
-    "delivery_info": [
+    "delivery_info_array": [
       {
         "delivery_date": "2024-06-03",
         "delivery_note": "Dejar pedido en conserjería",

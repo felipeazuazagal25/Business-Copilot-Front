@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
+import { useStateContext } from "../contexts/ContextProvider";
 import { customProducts } from "../data/customData";
 import { useSearchParams } from "react-router-dom";
 
@@ -8,13 +9,11 @@ import { FaSearch } from "react-icons/fa";
 
 // import { setTimeout } from "timers/promises";
 
-import { Header } from "../components";
+import { Header, DataGrid } from "../components";
 import DataTable from "../components/DataTable";
 
 import { fetchProducts, removeProducts } from "../utils/fetchProducts";
 import { Refresh } from "@mui/icons-material";
-
-import { useStateContext } from "../contexts/ContextProvider";
 
 import { ThreeDot } from "react-loading-indicators";
 
@@ -28,28 +27,28 @@ const Products = () => {
 
   const [originalData, setOriginalData] = useState(customProducts); // Fetch here the data with API calls
 
-  const columns = [
-    {
-      header: "Nombre del Producto",
-      accessorKey: "name",
-      footer: "Product Name",
-    },
-    { header: "Variante", accessorKey: "variant", footer: "Variant" },
-    // {
-    //   header: "Productos",
-    //   accessorKey: "products",
-    //   footer: "Products",
-    //   cell: ({ row }) =>
-    //     row.original.products !== undefined &&
-    //     row.original.products
-    //       .filter((item) => item.product_name !== "NotFound")
-    //       .map((item) => (
-    //         <>
-    //           {item.product_name} <br />
-    //         </>
-    //       )),
-    // },
-  ];
+  // const columns = [
+  //   {
+  //     header: "Nombre del Producto",
+  //     accessorKey: "name",
+  //     footer: "Product Name",
+  //   },
+  //   { header: "Variante", accessorKey: "variant", footer: "Variant" },
+  // {
+  //   header: "Productos",
+  //   accessorKey: "products",
+  //   footer: "Products",
+  //   cell: ({ row }) =>
+  //     row.original.products !== undefined &&
+  //     row.original.products
+  //       .filter((item) => item.product_name !== "NotFound")
+  //       .map((item) => (
+  //         <>
+  //           {item.product_name} <br />
+  //         </>
+  //       )),
+  // },
+  // ];
 
   const [isDataLoading, setIsDataLoading] = useState(false);
   const [dataError, setDataError] = useState(null);
@@ -66,7 +65,7 @@ const Products = () => {
     const fetchData = async () => {
       try {
         const vals = await fetchProducts();
-        console.log("nuevos productos: ", vals);
+        console.log("productos: ", vals);
         setData(vals);
         setIsDataLoading(false);
         setLoadingMessage(false);
@@ -169,15 +168,18 @@ const Products = () => {
         ) : dataError ? (
           <div>No se pudo cargar los productos.</div>
         ) : (
-          <DataTable
-            columns={columns}
+          <DataGrid
+            // columns={columns}
             data={data}
+            callbackRefresh={() => setRefreshPage(!refreshPage)}
+            redirectLink="products"
+            redirectKey="product_id"
+            title="name"
             callbackRemove={(res) => {
               if (res.length > 0) {
                 handleRemoveProducts(res);
               }
             }}
-            callbackRefresh={(value) => setRefreshPage(!refreshPage)}
           />
         )}
       </div>

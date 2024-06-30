@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
 
 import { CheckBox, PopUp } from "../components";
-
+import { Link, NavLink } from "react-router-dom";
 import { IoMdRefresh } from "react-icons/io";
-
 import { titleCase } from "../utils/utils";
 
 const DataGrid = ({
   data,
   callbackRefresh,
+  callbackRemove,
   title,
   subtitle,
   infoLabel,
   info,
+  redirectLink,
+  redirectKey,
   boxSize = { width: "72", height: "128" },
 }) => {
   const [checked, setChecked] = useState(data.map((item) => false));
@@ -87,37 +89,39 @@ const DataGrid = ({
               checked[id] ? "bg-gray-200 drop-shadow-md" : "bg-gray-100"
             }`}
           >
-            {/* Title */}
-            <div className="flex items-center justify-between w-full">
-              <div className="font-bold text-xl">{item[title]}</div>
-              <CheckBox
-                checked={checked[id]}
-                onChange={() => handleChekedRow(id)}
-              />
-            </div>
-            {/* Subtitle */}
-            {item[subtitle] ? (
+            <Link to={`/${redirectLink}/${item[redirectKey]}`}>
+              {/* Title */}
               <div className="flex items-center justify-between w-full">
-                <div className="text-md text-gray-600">{item[subtitle]}</div>
+                <div className="font-bold text-xl">{item[title]}</div>
+                <CheckBox
+                  checked={checked[id]}
+                  onChange={() => handleChekedRow(id)}
+                />
               </div>
-            ) : (
-              <></>
-            )}
-            {/* Info */}
-            <div className="px-2 mt-2">
-              {info.map((infoField, id) => (
-                <div className="flex w-full justify-between">
-                  <div className="text-gray-600">{infoLabel[id]}:</div>
-                  <div className="">
-                    {typeof item[infoField] === "boolean"
-                      ? item[infoField]
-                        ? "Si"
-                        : "No"
-                      : titleCase(item[infoField])}
-                  </div>
+              {/* Subtitle */}
+              {item[subtitle] ? (
+                <div className="flex items-center justify-between w-full">
+                  <div className="text-md text-gray-600">{item[subtitle]}</div>
                 </div>
-              ))}
-            </div>
+              ) : (
+                <></>
+              )}
+              {/* Info */}
+              <div className="px-2 mt-2">
+                {info?.map((infoField, id) => (
+                  <div className="flex w-full justify-between">
+                    <div className="text-gray-600">{infoLabel[id]}:</div>
+                    <div className="">
+                      {typeof item[infoField] === "boolean"
+                        ? item[infoField]
+                          ? "Si"
+                          : "No"
+                        : titleCase(item[infoField])}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Link>
           </div>
         ))}
       </div>

@@ -3,6 +3,8 @@ import { fetchOrders, removeOrders } from "../../utils/fetchOrders";
 import { findMissingNumberSequence } from "../../utils/utils";
 import { ThreeDot } from "react-loading-indicators";
 
+import { DataTable } from "../../components";
+
 import CustomTextField from "../CustomTextField";
 
 import Button from "../Button";
@@ -13,8 +15,6 @@ const MakeRouteStep2 = ({ routeDay }) => {
   const [isDataLoading, setIsDataLoading] = useState(true); // change it to false when data fetched
   const [dataError, setDataError] = useState(null);
   const [refreshPage, setRefreshPage] = useState(false);
-
-  const [namesDuplicates, setNamesDuplicates] = useState([]);
 
   useEffect(async () => {
     setIsDataLoading(true);
@@ -34,7 +34,9 @@ const MakeRouteStep2 = ({ routeDay }) => {
                 item.daily_id >= lowerBound && item.daily_id <= upperBound
             );
             const missingValues = findMissingNumberSequence(
-              filteredOrders.map((item) => Number(item.daily_id))
+              filteredOrders.map((item) => Number(item.daily_id)),
+              lowerBound,
+              upperBound
             );
             console.log("missing values", missingValues);
             setMissingValues(missingValues);
@@ -172,16 +174,16 @@ const MakeRouteStep2 = ({ routeDay }) => {
             <div className="p-5">
               {checkShowMissingValues ? (
                 missingValues.length > 0 ? (
-                  missingValues.map((item) => (
-                    <>
-                      <div className="text-lg font-bold">
-                        Faltan los siguientes pedidos
-                      </div>
+                  <>
+                    <div className="text-lg font-bold">
+                      Faltan los siguientes pedidos
+                    </div>
+                    {missingValues.map((item) => (
                       <div className="py-2 px-3 bg-gray-100 my-1 rounded-lg">
                         Pedido {item}
                       </div>
-                    </>
-                  ))
+                    ))}
+                  </>
                 ) : (
                   <div>
                     Todos los pedidos dentro de la secuencia se encuentran
@@ -192,6 +194,16 @@ const MakeRouteStep2 = ({ routeDay }) => {
                 <></>
               )}
             </div>
+            <DataTable
+              addButton={false}
+              columns={columns}
+              data={data}
+              columnRowClick={"order_id"}
+              callbackRefresh={() => {
+                setRefreshPage(!refreshPage);
+              }}
+              callbackRemove={(removeElements) => console.log(removeElements)}
+            />
           </>
         )}
       </div>

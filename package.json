@@ -26,6 +26,8 @@
     "dotenv": "^16.4.5",
     "install": "^0.13.0",
     "joi": "^17.13.1",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.2",
     "luxon": "^3.4.4",
     "npm": "^10.8.0",
     "query-string": "^9.0.0",
@@ -42,7 +44,8 @@
     "react-spinners": "^0.13.8",
     "swr": "^2.2.5",
     "timers": "^0.1.1",
-    "x-data-grid": "^2.1.0"
+    "x-data-grid": "^2.1.0",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",
